@@ -1,9 +1,9 @@
 import { Router } from "express";
 import { get } from "http";
-import { getRecipes} from "../controllers/recipesController";
+import { addToFavorites} from "../controllers/recipesController";
 
 const router = Router();
 
-router.get("/all", getRecipes);
+router.post("/add-to-favorites", addToFavorites);
 
 export default router;
