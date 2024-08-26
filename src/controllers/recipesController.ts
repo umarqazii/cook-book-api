@@ -5,7 +5,7 @@ import e from "express";
   import Favorite from "../models/Favorite";
 
 const extractRecipeId = (uri: string) => {
-  return uri.slice(-39);
+  return uri.slice(-32);
 }
 
 export const addToFavorites = (req: any, res: any) => {
@@ -58,3 +58,14 @@ export const addToFavorites = (req: any, res: any) => {
   }
 };
 
+export const getFavorites = (req: any, res: any) => {
+  Favorite.find()
+    .then((favorites: any) => {
+      return res.status(200).json({ favorites: favorites });
+    })
+    .catch((err: any) => {
+      return res.status(500).json({
+        error: err,
+      });
+    });
+};
