@@ -69,3 +69,21 @@ export const getFavorites = (req: any, res: any) => {
       });
     });
 };
+
+export const removeFavorite = (req: any, res: any) => {
+  let uri = req.body.uri;
+  console.log(uri);
+  if (!uri) {
+    return res.status(400).json({ message: "URI is required" });
+  }
+
+  Favorite.findOneAndDelete({ uri: uri })
+    .then((result: any) => {
+      return res.status(200).json({ message: "Favorite removed successfully" });
+    })
+    .catch((err: any) => {
+      return res.status(500).json({
+        error: err,
+      });
+    });
+};
