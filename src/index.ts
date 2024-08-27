@@ -4,41 +4,48 @@ import path from "path";
 import cors from "cors";
 import dotenv from "dotenv";
 import recipesRoutes from "./routes/recipesRoutes";
+import mongoose from "mongoose";
 
-require("dotenv").config();
+// Load environment variables
+dotenv.config();
 
-let mongoose = require("mongoose");
 const app = express();
 const port = process.env.PORT || 8080;
 
+// Middleware setup
 app.use(bodyParser.json());
 app.use(cors());
 app.use(express.json());
 
+// Test endpoint
 app.get("/", (req: Request, res: Response) => {
   res.send("Server is running");
 });
 
 app.use("/recipes", recipesRoutes);
 
-
 // Endpoint to serve uploaded images
 app.use('/uploads/images', express.static(path.join(__dirname, 'uploads/images')));
 
-// Connecting mongoDB Database
-mongoose.connect(process.env.MONG_URI, {
-  // useNewUrlParser: true,
-  // useUnifiedTopology: true,
-})
-  .then(() => {
+// MongoDB connection function
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONG_URI!, {
+      // Uncomment these if needed
+      // useNewUrlParser: true,
+      // useUnifiedTopology: true,
+    });
     console.log("MongoDB connection established successfully");
 
-    // Start the server only after the DB connection is established
-    const PORT = process.env.PORT || 8080; 
-    app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
+    // Start server after DB connection is established
+    app.listen(port, () => {
+      console.log(`Server is running on port ${port}`);
     });
-  })
-  .catch((err: any) => {
+  } catch (err) {
     console.error("MongoDB connection error:", err);
-  });
+    process.exit(1); // Exit process with failure
+  }
+};
+
+// Call the function to connect to DB
+connectDB();
