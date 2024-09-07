@@ -4,6 +4,7 @@ import path from "path";
 import cors from "cors";
 import dotenv from "dotenv";
 import recipesRoutes from "./routes/recipesRoutes";
+import uploadRoutes from "./routes/uploadRoutes";
 import mongoose from "mongoose";
 
 // Load environment variables
@@ -24,6 +25,8 @@ app.get("/", (req: Request, res: Response) => {
 
 app.use("/recipes", recipesRoutes);
 
+
+app.use("/upload", uploadRoutes);
 // Endpoint to serve uploaded images
 app.use('/uploads/images', express.static(path.join(__dirname, 'uploads/images')));
 

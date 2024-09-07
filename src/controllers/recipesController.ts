@@ -2,12 +2,17 @@ let mongoose = require("mongoose"),
   express = require("express"),
   router = express.Router();
 import e from "express";
-  import Favorite from "../models/Favorite";
+import Favorite from "../models/Favorite";
+import Recipes from "../models/Recipes";
 
+// functions related to favorites (add, remove and get) from the edamam api
+
+// Extract the recipe id from the URI
 const extractRecipeId = (uri: string) => {
   return uri.slice(-32);
-}
+};
 
+// Add a recipe to favorites
 export const addToFavorites = (req: any, res: any) => {
   console.log(req.body.uri);
   let uri = req.body.uri;
@@ -24,7 +29,9 @@ export const addToFavorites = (req: any, res: any) => {
     Favorite.findOne({ uri: uri })
       .then((existingFavorite: any) => {
         if (existingFavorite) {
-          return res.status(200).json({ message: "Recipe is already in favorites" });
+          return res
+            .status(200)
+            .json({ message: "Recipe is already in favorites" });
         } else {
           const newFavorite = new Favorite({
             uri: uri,
@@ -58,6 +65,7 @@ export const addToFavorites = (req: any, res: any) => {
   }
 };
 
+// Get all favorites
 export const getFavorites = (req: any, res: any) => {
   Favorite.find()
     .then((favorites: any) => {
@@ -70,6 +78,7 @@ export const getFavorites = (req: any, res: any) => {
     });
 };
 
+// Remove a favorite
 export const removeFavorite = (req: any, res: any) => {
   let uri = req.body.uri;
   console.log(uri);
@@ -87,3 +96,38 @@ export const removeFavorite = (req: any, res: any) => {
       });
     });
 };
+///////////////////////////////////////////////////////////////////////////////////
+
+// functions for custom recipes
+
+export const createRecipe = (req: any, res: any) => {
+  const { imageName,recipeName, cuisineType, mealType, dishType, ingredients, instructions } = req.body;
+
+  console.log(req.body);
+
+  const newRecipe = new Recipes({
+    imageName,
+    recipeName,
+    cuisineType,
+    mealType,
+    dishType,
+    ingredients,
+    instructions
+  });
+
+  newRecipe
+    .save()
+    .then((result: any) => {
+      return res.status(201).json({
+        message: "Recipe created successfully",
+        recipe: result,
+      });
+    })
+    .catch((err: any) => {
+      return res.status(500).json({
+        error: err,
+      });
+    });
+
+};
+
