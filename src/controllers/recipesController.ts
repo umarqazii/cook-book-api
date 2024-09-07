@@ -100,12 +100,15 @@ export const removeFavorite = (req: any, res: any) => {
 
 // functions for custom recipes
 
+// create a recipe
 export const createRecipe = (req: any, res: any) => {
   const { imageName,recipeName, cuisineType, mealType, dishType, ingredients, instructions } = req.body;
-
-  console.log(req.body);
+  // dateOfPosting should store the current date
+  const dateOfPosting = new Date();
+  //console.log(req.body);
 
   const newRecipe = new Recipes({
+    dateOfPosting,
     imageName,
     recipeName,
     cuisineType,
@@ -129,5 +132,17 @@ export const createRecipe = (req: any, res: any) => {
       });
     });
 
+};
+
+export const getAllRecipes = (req: any, res: any) => {
+  Recipes.find()
+    .then((recipes: any) => {
+      return res.status(200).json({ recipes: recipes });
+    })
+    .catch((err: any) => {
+      return res.status(500).json({
+        error: err,
+      });
+    });
 };
 

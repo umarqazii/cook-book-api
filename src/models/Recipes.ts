@@ -30,6 +30,10 @@ const recipeSchema = new mongoose.Schema({
         type: [String],
         required: true,
     },
+    dateOfPosting: {
+        type: Date,
+        required: true,
+    }
 });
 
 const Recipe = mongoose.model("Recipe", recipeSchema);
