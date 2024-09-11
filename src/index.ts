@@ -5,6 +5,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import recipesRoutes from "./routes/recipesRoutes";
 import uploadRoutes from "./routes/uploadRoutes";
+import authRoutes from "./routes/authRoutes";
 import mongoose from "mongoose";
 
 // Load environment variables
@@ -24,7 +25,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/recipes", recipesRoutes);
-
+app.use("/auth", authRoutes);
 
 app.use("/upload", uploadRoutes);
 // Endpoint to serve uploaded images
@@ -33,11 +34,7 @@ app.use('/uploads/images', express.static(path.join(__dirname, 'uploads/images')
 // MongoDB connection function
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONG_URI!, {
-      // Uncomment these if needed
-      // useNewUrlParser: true,
-      // useUnifiedTopology: true,
-    });
+    await mongoose.connect(process.env.MONG_URI!, {});
     console.log("MongoDB connection established successfully");
 
     // Start server after DB connection is established

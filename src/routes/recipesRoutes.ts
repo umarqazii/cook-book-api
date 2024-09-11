@@ -10,5 +10,4 @@ router.post("/remove-favorite", removeFavorite);
 router.post("/create-recipe", createRecipe);
 router.get("/get-all-recipes", getAllRecipes);
 
-
 export default router;
