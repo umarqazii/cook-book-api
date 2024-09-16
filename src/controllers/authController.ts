@@ -1,7 +1,10 @@
 let mongoose = require("mongoose"), express = require("express"), router = express.Router();
 import { Request, Response } from "express";
 import Account from "../models/Accounts";
+import jwt from "jsonwebtoken";
 import e from "express";
+
+const secretKey = process.env.SECRET_KEY || "your_jwt_secret_key";
 
 export const login = async (req: Request, res: Response) => {
   try {
@@ -21,7 +24,8 @@ export const login = async (req: Request, res: Response) => {
     }
 
     // Step 4: Send success response with user data (or token if needed)
-    return res.status(200).json({ message: "Login successful", user });
+    const token = jwt.sign({ _id: user._id, Username: user.Username, Email: user.Email }, secretKey, { expiresIn: "1h" });
+    return res.status(200).json({ message: "Login successful", auth: true, token });
     
   } catch (err) {
     console.error(err);
@@ -29,6 +33,9 @@ export const login = async (req: Request, res: Response) => {
   }
 };
 
+export const protectedRoute = (req: Request, res: Response) => {
+  res.status(200).send("Token is valid and user is authenticated.");
+};
 
 // function to turn Full name into username. turn the characters into lowercase, remove the spaces and add 5  random numbers at the end
 const generateUsername = (fullName: string): string => {
