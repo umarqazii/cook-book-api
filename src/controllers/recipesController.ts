@@ -2,6 +2,7 @@ let mongoose = require("mongoose"),
   express = require("express"),
   router = express.Router();
 import e from "express";
+import { Request, Response } from 'express';
 import Favorite from "../models/Favorite";
 import Recipes from "../models/Recipes";
 
@@ -68,18 +69,29 @@ export const addToFavorites = (req: any, res: any) => {
 };
 
 // Get all favorites
-export const getFavorites = (req: any, res: any) => {
-  Favorite.find()
-    .then((favorites: any) => {
-      return res.status(200).json({ favorites: favorites });
-    })
-    .catch((err: any) => {
-      return res.status(500).json({
-        error: err,
-      });
-    });
-};
+export const getFavorites = async (req: Request, res: Response) => {
+  console.log(req.body.userid)
+  try {
+    const userId = req.body.userid;
 
+    // Check if the userId is provided
+    if (!userId) {
+      return res.status(400).json({ error: 'User ID is required' });
+    }
+
+
+    // Query the favorites collection to find all entries with the given _id (userid)
+    const favorites = await Favorite.find({ userid: userId });
+
+    // Return the favorites as a JSON response
+    return res.status(200).json({ favorites });
+  } catch (err) {
+    console.error('Error retrieving favorites:', err);
+    return res.status(500).json({
+      error: 'An error occurred while fetching favorites',
+    });
+  }
+};
 // Remove a favorite
 export const removeFavorite = (req: any, res: any) => {
   let uri = req.body.uri;
