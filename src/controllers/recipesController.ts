@@ -14,8 +14,9 @@ const extractRecipeId = (uri: string) => {
 
 // Add a recipe to favorites
 export const addToFavorites = (req: any, res: any) => {
-  console.log(req.body.uri);
+  console.log(req.body.uri, req.body.userid);
   let uri = req.body.uri;
+  let userid = req.body.userid;
 
   if (!uri) {
     return res.status(400).json({ message: "URI is required" });
@@ -34,6 +35,7 @@ export const addToFavorites = (req: any, res: any) => {
             .json({ message: "Recipe is already in favorites" });
         } else {
           const newFavorite = new Favorite({
+            userid: userid,
             uri: uri,
             recipeid: recipeid,
           });
