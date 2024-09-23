@@ -19,8 +19,8 @@ export const addToFavorites = (req: any, res: any) => {
   let uri = req.body.uri;
   let userid = req.body.userid;
 
-  if (!uri) {
-    return res.status(400).json({ message: "URI is required" });
+  if (!uri || !userid) {
+    return res.status(400).json({ message: "URI and userid is required" });
   }
 
   let recipeid = extractRecipeId(uri);
@@ -28,7 +28,7 @@ export const addToFavorites = (req: any, res: any) => {
 
   try {
     // Check if the recipe is already in the favorites
-    Favorite.findOne({ uri: uri })
+    Favorite.findOne({ uri: uri, userid: userid })
       .then((existingFavorite: any) => {
         if (existingFavorite) {
           return res
