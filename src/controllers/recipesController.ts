@@ -95,12 +95,13 @@ export const getFavorites = async (req: Request, res: Response) => {
 // Remove a favorite
 export const removeFavorite = (req: any, res: any) => {
   let uri = req.body.uri;
+  let userid = req.body.userid;
   console.log(uri);
-  if (!uri) {
-    return res.status(400).json({ message: "URI is required" });
+  if (!uri || !userid) {
+    return res.status(400).json({ message: "URI and userid is required" });
   }
 
-  Favorite.findOneAndDelete({ uri: uri })
+  Favorite.findOneAndDelete({ uri: uri, userid:userid })
     .then((result: any) => {
       return res.status(200).json({ message: "Favorite removed successfully" });
     })
