@@ -24,7 +24,7 @@ export const login = async (req: Request, res: Response) => {
     }
 
     // Step 4: Send success response with user data (or token if needed)
-    const token = jwt.sign({ _id: user._id, Username: user.Username, Email: user.Email }, secretKey, { expiresIn: "1m" });
+    const token = jwt.sign({ _id: user._id, Username: user.Username, Email: user.Email }, secretKey, { expiresIn: "30m" });
     return res.status(200).json({ message: "Login successful", auth: true, token, user: user });
     
   } catch (err) {
