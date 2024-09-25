@@ -8,6 +8,6 @@ router.post("/add-to-favorites", addToFavorites);
 router.post("/get-favorites", getFavorites);
 router.post("/remove-favorite", removeFavorite);
 router.post("/create-recipe", createRecipe);
-router.get("/get-all-recipes", getAllRecipes);
+router.post("/get-all-recipes", getAllRecipes);
 
 export default router;

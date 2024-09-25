@@ -117,12 +117,13 @@ export const removeFavorite = (req: any, res: any) => {
 
 // create a recipe
 export const createRecipe = (req: any, res: any) => {
-  const { imageName,recipeName, cuisineType, mealType, dishType, ingredients, instructions } = req.body;
+  const { userid, imageName,recipeName, cuisineType, mealType, dishType, ingredients, instructions } = req.body;
   // dateOfPosting should store the current date
   const dateOfPosting = new Date();
   //console.log(req.body);
 
   const newRecipe = new Recipes({
+    userid,
     dateOfPosting,
     imageName,
     recipeName,
@@ -150,7 +151,12 @@ export const createRecipe = (req: any, res: any) => {
 };
 
 export const getAllRecipes = (req: any, res: any) => {
-  Recipes.find()
+  const userId = req.body.userid;
+   // Check if the userId is provided
+   if (!userId) {
+    return res.status(400).json({ error: 'User ID is required' });
+  }
+  Recipes.find({ userid: userId })
     .then((recipes: any) => {
       return res.status(200).json({ recipes: recipes });
     })
